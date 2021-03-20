@@ -1,8 +1,8 @@
 <template>
   <header>
-    <Navbar />
+    <Navbar :bug="bug" />
   </header>
-  <main>
+  <main class="container-fluid">
     <router-view />
   </main>
   <footer>
@@ -13,13 +13,19 @@
 </template>
 
 <script>
-import { computed } from 'vue'
+import { computed, onMounted } from 'vue'
 import { AppState } from './AppState'
+import { bugService } from './services/BugService'
+
 export default {
   name: 'App',
   setup() {
+    onMounted(() => {
+      bugService.getBugs()
+    })
     return {
-      appState: computed(() => AppState)
+      appState: computed(() => AppState),
+      bug: computed(() => AppState.bugDetails)
     }
   }
 }

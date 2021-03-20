@@ -1,3 +1,3 @@
-export const domain = ''
-export const clientId = ''
-export const audience = ''
+export const domain = 'ethanmmay.us.auth0.com'
+export const clientId = 'XZUEQnGGfpFOQGcQMQMuRmbOWuDycTN2'
+export const audience = 'https://bcw-buglog'

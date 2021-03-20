@@ -27,9 +27,9 @@
             Home
           </router-link>
         </li>
-        <li class="nav-item">
-          <router-link :to="{ name: 'About' }" class="nav-link">
-            About
+        <li class="nav-item" v-show="state.bugDetails.title">
+          <router-link :to="{ name: 'Bug', params: { id: bug.id }}" class="nav-link" v-show="state.bugDetails.title">
+            Bug
           </router-link>
         </li>
       </ul>
@@ -84,9 +84,13 @@ import { AppState } from '../AppState'
 import { computed, reactive } from 'vue'
 export default {
   name: 'Navbar',
+  props: {
+    bug: { type: Object, default: undefined }
+  },
   setup() {
     const state = reactive({
-      dropOpen: false
+      dropOpen: false,
+      bugDetails: computed(() => AppState.bugDetails)
     })
     return {
       state,

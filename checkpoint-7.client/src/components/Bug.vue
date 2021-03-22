@@ -5,7 +5,7 @@
         <!-- Table Headers -->
         <div class="col-3 d-flex justify-content-center align-items-center">
           <h5 class="mb-0 py-1">
-            <router-link :to="{name: 'Bug', params: { id: bug.id }}" :class="bug.closed ? 'text-danger' : 'text-success'">
+            <router-link :to="{name: 'Bug', params: { id: bug.id }}" class="underline" :class="bug.closed ? 'text-danger' : 'text-success'">
               {{ bug.title }}
             </router-link>
           </h5>
@@ -22,7 +22,7 @@
         </div>
         <div class="col-3 d-flex justify-content-center align-items-center bd-r">
           <h5 class="mb-0 py-1">
-            {{ bug.updatedAt }}
+            {{ bug.updatedAt.substring(5, 7) + '-' + bug.updatedAt.substring(8, 10) + '-' + bug.updatedAt.substring(0, 4) }}
           </h5>
         </div>
       </div>
@@ -42,6 +42,11 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped lang="scss">
+.underline {
+  text-decoration: underline;
+}
+.underline:hover {
+  text-decoration: none;
+}
 </style>

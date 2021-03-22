@@ -26,6 +26,7 @@
             <h5 class="mb-0 py-1">
               Status
             </h5>
+            <i class="fa fa-chevron-down" aria-hidden="true" @click="sortBugs()"></i>
           </div>
           <div class="col-3 d-flex justify-content-center align-items-center theader bd-r">
             <h5 class="mb-0 py-1">
@@ -35,7 +36,7 @@
         </div>
       </div>
     </div>
-    <Bug v-for="bug in state.bugs" :key="bug.title" :bug="bug" />
+    <Bug v-for="bug in state.bugs" :key="bug.id" :bug="bug" />
   </div>
 </template>
 
@@ -56,6 +57,9 @@ export default {
       state,
       createBug() {
         bugService.createBug()
+      },
+      sortBugs() {
+        bugService.sortBugs()
       }
     }
   }
@@ -81,5 +85,15 @@ export default {
 
 .h5 {
   margin-bottom: 0vh !important;
+}
+
+.fa {
+  font-size: 10pt;
+  margin-left: 2vh;
+}
+
+.fa:hover {
+  cursor: pointer;
+  transform: scale(0.9);
 }
 </style>

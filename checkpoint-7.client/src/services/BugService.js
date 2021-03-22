@@ -38,6 +38,7 @@ class BugService {
           creatorId: AppState.user.id
         }
         await api.post('api/bugs', newBug)
+        AppState.bugs = []
         await this.getBugs()
         router.push({ name: 'Bug', params: { id: AppState.bugs[AppState.bugs.length - 1].id } })
       })
@@ -64,7 +65,7 @@ class BugService {
       }).then(async(result) => {
         if (result.isConfirmed) {
           await api.delete('api/bugs/' + bugId)
-          this.getBugs()
+          await this.getBugs()
           Swal.fire(
             'Done!',
             'Your bug has been marked closed.',
@@ -75,6 +76,10 @@ class BugService {
     } catch (error) {
       logger.log(error)
     }
+  }
+
+  sortBugs() {
+    AppState.bugs.sort(function(a, b) { return a.closed - b.closed })
   }
 }
 

@@ -7,7 +7,7 @@
         </h6>
         <h3> {{ bug.title }} </h3>
       </div>
-      <button class="btn btn-danger" @click="markClosed(bug.id)">
+      <button class="btn btn-danger" @click="markClosed(bug.id)" v-if="bug.creator.name === state.currentUser.name">
         Close
       </button>
     </div>
@@ -59,7 +59,7 @@
         </div>
       </div>
     </div>
-    <Note v-for="note in state.notes" :key="note.body" :note="note" />
+    <Note v-for="note in state.notes" :key="note.id" :note="note" />
   </div>
 </template>
 
@@ -79,7 +79,8 @@ export default {
       bugService.getNotesByBugId(props.bug.id)
     })
     const state = reactive({
-      notes: computed(() => AppState.notes)
+      notes: computed(() => AppState.notes),
+      currentUser: computed(() => AppState.user)
     })
     return {
       state,

@@ -15,7 +15,7 @@
         </div>
         <div class="col-3 d-flex justify-content-center align-items-center bd-r">
           <h5 class="mb-0 py-1">
-            <i class="fa fa-trash-o" aria-hidden="true" @click="deleteNote(note)"></i>
+            <i class="fa fa-trash-o" aria-hidden="true" @click="deleteNote(note)" v-if="note.creator.name === state.currentUser.name"></i>
           </h5>
         </div>
       </div>
@@ -24,16 +24,22 @@
 </template>
 
 <script>
+import { computed, reactive } from 'vue'
 import { noteService } from '../services/NoteService'
+import { AppState } from '../AppState'
 export default {
   props: {
     note: { type: Object, default: undefined }
   },
   setup() {
+    const state = reactive({
+      currentUser: computed(() => AppState.user)
+    })
     return {
       deleteNote(note) {
         noteService.deleteNote(note)
-      }
+      },
+      state
     }
   }
 }

@@ -56,14 +56,25 @@
         </div>
       </div>
     </div>
-    <Note v-for="note in state.notes" :key="note.title" :note="note" />
+    <Note v-for="note in state.notes" :key="note.body" :note="note" />
   </div>
 </template>
 
 <script>
+import { reactive } from 'vue'
+import { AppState } from '../AppState'
 export default {
   props: {
     bug: { type: Object, default: undefined }
+  },
+  setup() {
+    const state = reactive({
+      notes: AppState.notes
+    })
+
+    return {
+      state
+    }
   }
 
 }

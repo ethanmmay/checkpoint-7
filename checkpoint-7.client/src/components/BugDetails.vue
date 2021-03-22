@@ -16,7 +16,10 @@
         <h6 class="mr-3">
           Reported By:
         </h6>
-        <h3> {{ bug.creator.name.substring(0, bug.creator.name.indexOf('@')) }} </h3>
+        <div class="d-inline-flex align-items-center">
+          <img :src="bug.creator.picture" class="pfp-img mr-2" alt="User Picture">
+          <h3> {{ bug.creator.name.substring(0, bug.creator.name.indexOf('@')) }} </h3>
+        </div>
       </div>
       <h6 class="d-inline-flex align-items-center">
         Status:
@@ -65,11 +68,13 @@ import { computed, onMounted, reactive } from 'vue'
 import { AppState } from '../AppState'
 import { bugService } from '../services/BugService'
 import { noteService } from '../services/NoteService'
+import { useRoute } from 'vue-router'
 export default {
   props: {
     bug: { type: Object, default: undefined }
   },
   setup(props) {
+    const route = useRoute()
     onMounted(() => {
       bugService.getNotesByBugId(props.bug.id)
     })
@@ -79,7 +84,7 @@ export default {
     return {
       state,
       createNote() {
-        noteService.createNote()
+        noteService.createNote(route)
       },
       markClosed(bugId) {
         bugService.markClosed(bugId)
@@ -109,5 +114,10 @@ export default {
 
 .h5 {
   margin-bottom: 0vh !important;
+}
+
+.pfp-img {
+  width: 35px;
+  height: 35px;
 }
 </style>

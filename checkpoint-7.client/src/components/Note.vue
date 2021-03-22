@@ -15,7 +15,7 @@
         </div>
         <div class="col-3 d-flex justify-content-center align-items-center bd-r">
           <h5 class="mb-0 py-1">
-            <i class="fa fa-trash-o" aria-hidden="true" @click="deleteNote(note.id)"></i>
+            <i class="fa fa-trash-o" aria-hidden="true" @click="deleteNote(note)"></i>
           </h5>
         </div>
       </div>
@@ -31,8 +31,8 @@ export default {
   },
   setup() {
     return {
-      deleteNote(noteId) {
-        noteService.deleteNote(noteId)
+      deleteNote(note) {
+        noteService.deleteNote(note)
       }
     }
   }

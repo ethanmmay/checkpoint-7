@@ -5,7 +5,7 @@
         <!-- Table Headers -->
         <div class="col-3 d-flex justify-content-center align-items-center">
           <h5 class="mb-0 py-1">
-            <router-link :to="{name: 'Bug', params: { id: bug.id }}">
+            <router-link :to="{name: 'Bug', params: { id: bug.id }}" :class="bug.closed ? 'text-danger' : 'text-success'">
               {{ bug.title }}
             </router-link>
           </h5>

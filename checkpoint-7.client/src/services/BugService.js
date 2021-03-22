@@ -2,6 +2,7 @@
 import { AppState } from '../AppState'
 import { Bug } from '../models/Bug'
 import { Note } from '../models/Note'
+import router from '../router'
 import { logger } from '../utils/Logger'
 import { api } from './AxiosService'
 
@@ -37,7 +38,8 @@ class BugService {
           creatorId: AppState.user.id
         }
         await api.post('api/bugs', newBug)
-        this.getBugs()
+        await this.getBugs()
+        router.push({ name: 'Bug', params: { id: AppState.bugs[AppState.bugs.length - 1].id } })
       })
     } catch (err) {
       logger.error('Couldnt create Bug', err)
@@ -50,8 +52,29 @@ class BugService {
   }
 
   async markClosed(bugId) {
-    await api.delete('api/bugs/' + bugId)
-    this.getBugs()
+    try {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, mark closed.'
+      }).then(async(result) => {
+        if (result.isConfirmed) {
+          await api.delete('api/bugs/' + bugId)
+          this.getBugs()
+          Swal.fire(
+            'Done!',
+            'Your bug has been marked closed.',
+            'success'
+          )
+        }
+      })
+    } catch (error) {
+      logger.log(error)
+    }
   }
 }
 

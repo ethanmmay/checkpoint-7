@@ -2,6 +2,7 @@
 import { AppState } from '../AppState'
 import { logger } from '../utils/Logger'
 import { api } from './AxiosService'
+import { bugService } from './BugService'
 
 class NoteService {
   async createNote(route) {
@@ -14,7 +15,7 @@ class NoteService {
         preConfirm: () => {
           const body = Swal.getPopup().querySelector('#body').value
           if (!body) {
-            Swal.showValidationMessage('Pleas enter a body')
+            Swal.showValidationMessage('Please enter a body')
           }
           return { body: body }
         }
@@ -25,10 +26,36 @@ class NoteService {
           creatorId: AppState.user.id
         }
         await api.post('api/notes', newNote)
-        this.getNotes()
+        bugService.getNotesByBugId(route.params.id)
       })
     } catch (err) {
       logger.error('Couldnt create Note', err)
+    }
+  }
+
+  async deleteNote(note) {
+    try {
+      Swal.fire({
+        title: 'Are you sure?',
+        text: "You won't be able to revert this!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes, delete it!'
+      }).then(async(result) => {
+        if (result.isConfirmed) {
+          await api.delete('api/notes/' + note.id)
+          bugService.getNotesByBugId(note.bug)
+          Swal.fire(
+            'Deleted!',
+            'Your note has been deleted.',
+            'success'
+          )
+        }
+      })
+    } catch (error) {
+      logger.log(error)
     }
   }
 }

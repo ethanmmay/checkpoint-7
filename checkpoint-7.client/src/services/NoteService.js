@@ -1,19 +1,9 @@
 /* eslint-disable no-undef */
 import { AppState } from '../AppState'
-import { Note } from '../models/Note'
 import { logger } from '../utils/Logger'
 import { api } from './AxiosService'
 
 class NoteService {
-  async getNotes() {
-    try {
-      const res = await api.get('api/notes')
-      AppState.notes = res.data.map(n => new Note(n))
-    } catch (err) {
-      logger.error('Couldnt load Notes', err)
-    }
-  }
-
   async createNote(route) {
     try {
       Swal.fire({
@@ -40,10 +30,6 @@ class NoteService {
     } catch (err) {
       logger.error('Couldnt create Note', err)
     }
-  }
-
-  setNoteDetails(noteId) {
-    AppState.noteDetails = AppState.notes.filter(b => b.id === noteId)[0]
   }
 }
 

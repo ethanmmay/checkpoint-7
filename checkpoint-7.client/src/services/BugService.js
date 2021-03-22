@@ -1,6 +1,7 @@
 /* eslint-disable no-undef */
 import { AppState } from '../AppState'
 import { Bug } from '../models/Bug'
+import { Note } from '../models/Note'
 import { logger } from '../utils/Logger'
 import { api } from './AxiosService'
 
@@ -43,8 +44,14 @@ class BugService {
     }
   }
 
-  setBugDetails(bugId) {
-    AppState.bugDetails = AppState.bugs.filter(b => b.id === bugId)[0]
+  async getNotesByBugId(bugId) {
+    const res = await api.get(`api/bugs/${bugId}/notes`)
+    AppState.notes = res.data.map(n => new Note(n))
+  }
+
+  async markClosed(bugId) {
+    await api.delete('api/bugs/' + bugId)
+    this.getBugs()
   }
 }
 

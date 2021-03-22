@@ -36,7 +36,8 @@ export default {
     bug: { type: Object, default: undefined }
   },
   setup() {
-
+    return {
+    }
   }
 }
 </script>

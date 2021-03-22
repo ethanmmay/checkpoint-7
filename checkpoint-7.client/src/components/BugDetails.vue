@@ -1,5 +1,5 @@
 <template>
-  <div class="col-12 mt-4">
+  <div class="col-12 mt-4" v-show="bug">
     <div class="row d-inline-flex justify-content-between w-100">
       <div class="d-inline-flex align-items-center">
         <h6 class="mr-3">
@@ -7,7 +7,7 @@
         </h6>
         <h3> {{ bug.title }} </h3>
       </div>
-      <button class="btn btn-danger">
+      <button class="btn btn-danger" @click="markClosed(bug.id)">
         Close
       </button>
     </div>
@@ -30,7 +30,7 @@
     </div>
     <div class="row mt-5">
       <h4>Notes</h4>
-      <button class="btn btn-success ml-2">
+      <button class="btn btn-success ml-2" @click="createNote()">
         Add
       </button>
     </div>
@@ -63,21 +63,26 @@
 <script>
 import { computed, onMounted, reactive } from 'vue'
 import { AppState } from '../AppState'
+import { bugService } from '../services/BugService'
 import { noteService } from '../services/NoteService'
 export default {
   props: {
     bug: { type: Object, default: undefined }
   },
-  setup() {
+  setup(props) {
     onMounted(() => {
-      noteService.getNotes()
+      bugService.getNotesByBugId(props.bug.id)
     })
     const state = reactive({
       notes: computed(() => AppState.notes)
     })
     return {
       state,
-      loadState() {
+      createNote() {
+        noteService.createNote()
+      },
+      markClosed(bugId) {
+        bugService.markClosed(bugId)
       }
     }
   }

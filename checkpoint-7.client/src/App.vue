@@ -32,5 +32,7 @@ export default {
 </script>
 <style lang="scss">
 @import "./assets/scss/main.scss";
-
+textarea {
+  min-height: 350px;
+}
 </style>

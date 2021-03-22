@@ -48,8 +48,10 @@ class BugService {
   }
 
   async getNotesByBugId(bugId) {
-    const res = await api.get(`api/bugs/${bugId}/notes`)
-    AppState.notes = res.data.map(n => new Note(n))
+    if (bugId !== '') {
+      const res = await api.get(`api/bugs/${bugId}/notes`)
+      AppState.notes = res.data.map(n => new Note(n))
+    }
   }
 
   async markClosed(bugId) {
@@ -80,6 +82,35 @@ class BugService {
 
   sortBugs() {
     AppState.bugs.sort(function(a, b) { return a.closed - b.closed })
+  }
+
+  async editBug(bug) {
+    try {
+      Swal.fire({
+        title: 'Edit Bug',
+        html: `<input type="text" id="title" class="swal2-input" placeholder="Enter Bug Name.. " value="${bug.title}"><textarea type="text" id="body" class="swal2-input pt-2" placeholder="Describe the bug...">${bug.description}</textarea>`,
+        confirmButtonText: 'Save',
+        focusConfirm: false,
+        preConfirm: () => {
+          const title = Swal.getPopup().querySelector('#title').value
+          const body = Swal.getPopup().querySelector('#body').value
+          if (!title || !body) {
+            Swal.showValidationMessage('Please enter title and body')
+          }
+          return { title: title, body: body }
+        }
+      }).then(async(result) => {
+        const newBug = {
+          title: result.value.title,
+          description: result.value.body
+        }
+        await api.put('api/bugs/' + bug.id, newBug)
+        AppState.bugs = []
+        await this.getBugs()
+      })
+    } catch (err) {
+      logger.error('Couldnt edit Bug', err)
+    }
   }
 }
 

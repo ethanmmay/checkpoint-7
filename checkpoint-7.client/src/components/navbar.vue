@@ -1,11 +1,12 @@
 <template>
-  <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+  <nav class="navbar navbar-expand-lg navbar-dark bg-buglog">
     <router-link class="navbar-brand d-flex" :to="{ name: 'Home' }">
       <div class="d-flex flex-column align-items-center">
         <img
           alt="logo"
           src="../assets/img/cw-logo.png"
           height="45"
+          class="img-buglog"
         />
       </div>
     </router-link>
@@ -44,16 +45,12 @@
 
         <div class="dropdown" v-else>
           <div
-            class="dropdown-toggle"
+            class="dropdown-toggle mr-3 mt-2"
             @click="state.dropOpen = !state.dropOpen"
           >
-            <img
-              :src="user.picture"
-              alt="user photo"
-              height="40"
-              class="rounded"
-            />
-            <span class="mx-3">{{ user.name }}</span>
+            <button class="btn btn-danger btn-maroon no-radius">
+              Logout
+            </button>
           </div>
           <div
             class="dropdown-menu p-0 list-group w-100"
@@ -107,6 +104,16 @@ export default {
 </script>
 
 <style scoped>
+.bg-buglog {
+  background-color: #8c9999;
+}
+.btn-maroon {
+  background-color: #472424;
+  border: 0px;
+}
+.img-buglog {
+  filter: drop-shadow(1px 2px 2px rgba(0, 0, 0, 0.644));
+}
 .dropdown-menu {
   user-select: none;
   display: block;

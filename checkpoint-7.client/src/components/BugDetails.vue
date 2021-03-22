@@ -1,15 +1,20 @@
 <template>
-  <div class="col-12 mt-4" v-show="bug">
+  <div class="col-12 mt-4">
     <div class="row d-inline-flex justify-content-between w-100">
       <div class="d-inline-flex align-items-center">
         <h6 class="mr-3">
           Title:
         </h6>
-        <h3> {{ bug.title }} </h3>
+        <h2> {{ bug.title }} </h2>
       </div>
-      <button class="btn btn-danger" @click="markClosed(bug.id)" v-if="bug.creator.name === state.currentUser.name">
-        Close
-      </button>
+      <div class="d-inline-flex" v-if="bug.creator.name === state.currentUser.name && !bug.closed">
+        <button class="btn btn-info mr-3 no-radius" @click="editBug(bug)">
+          Edit
+        </button>
+        <button class="btn btn-danger no-radius" @click="markClosed(bug.id)">
+          Close
+        </button>
+      </div>
     </div>
     <div class="row d-inline-flex align-items-center justify-content-between w-100">
       <div class="d-inline-flex align-items-center">
@@ -32,34 +37,40 @@
       <p> {{ bug.description }} </p>
     </div>
     <div class="row mt-5">
-      <h4>Notes</h4>
-      <button class="btn btn-success ml-2" @click="createNote()">
+      <h2 class="mb-0 d-flex align-items-end">
+        Notes
+      </h2>
+      <button class="btn btn-success ml-2 no-radius" @click="createNote()" v-if="state.currentUser.isAuthenticated">
         Add
       </button>
     </div>
-    <div class="row px-4 mt-3">
-      <div class="col-12">
-        <div class="row">
-          <!-- Table Headers -->
-          <div class="col-3 d-flex justify-content-center align-items-center theader">
-            <h5 class="mb-0 py-1">
-              Name
-            </h5>
-          </div>
-          <div class="col-6 d-flex justify-content-center align-items-center theader">
-            <h5 class="mb-0 py-1">
-              Message
-            </h5>
-          </div>
-          <div class="col-3 d-flex justify-content-center align-items-center theader bd-r">
-            <h5 class="mb-0 py-1">
-              Delete
-            </h5>
+    <div class="row">
+      <div class="col-12 borders mt-2">
+        <div class="row theader py-1">
+          <div class="col-12">
+            <div class="row">
+              <!-- Table Headers -->
+              <div class="col-3 d-flex justify-content-center align-items-center">
+                <h5 class="mb-0 py-1">
+                  Name
+                </h5>
+              </div>
+              <div class="col-6 d-flex justify-content-center align-items-center">
+                <h5 class="mb-0 py-1">
+                  Message
+                </h5>
+              </div>
+              <div class="col-3 d-flex justify-content-center align-items-center bd-r">
+                <h5 class="mb-0 py-1">
+                  Delete
+                </h5>
+              </div>
+            </div>
           </div>
         </div>
+        <Note v-for="note in state.notes" :key="note.id" :note="note" />
       </div>
     </div>
-    <Note v-for="note in state.notes" :key="note.id" :note="note" />
   </div>
 </template>
 
@@ -69,14 +80,16 @@ import { AppState } from '../AppState'
 import { bugService } from '../services/BugService'
 import { noteService } from '../services/NoteService'
 import { useRoute } from 'vue-router'
+import { Bug } from '../models/Bug'
 export default {
   props: {
-    bug: { type: Object, default: undefined }
+    bug: { type: Object, default: () => new Bug() }
   },
   setup(props) {
     const route = useRoute()
     onMounted(() => {
-      bugService.getNotesByBugId(props.bug.id)
+      bugService.getNotesByBugId(route.params.id)
+      AppState.bugDetails = props.bug
     })
     const state = reactive({
       notes: computed(() => AppState.notes),
@@ -89,6 +102,9 @@ export default {
       },
       markClosed(bugId) {
         bugService.markClosed(bugId)
+      },
+      editBug(bug) {
+        bugService.editBug(bug)
       }
     }
   }
@@ -97,28 +113,22 @@ export default {
 </script>
 
 <style lang="scss">
-.col-3, .col-6 {
-  border: 3px solid var(--dark);
-  border-right: 0px;
-  border-top: 0px;
-}
-
-.theader {
-  border-top: 3px solid var(--dark);
-  border-bottom: 3px solid var(--danger);
-  background-color: var(--primary);
-}
-
-.bd-r {
-  border-right: 3px solid var(--dark);
-}
 
 .h5 {
   margin-bottom: 0vh !important;
 }
-
+.no-radius {
+  border-radius: 0;
+  width: 120px
+}
 .pfp-img {
   width: 35px;
   height: 35px;
+}
+.borders {
+  border: 1px solid black;
+}
+.theader {
+  border-bottom: 2px solid var(--danger);
 }
 </style>

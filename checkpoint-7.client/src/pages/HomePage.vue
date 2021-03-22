@@ -2,41 +2,45 @@
   <div class="col-12 my-5">
     <div class="row d-flex align-items-center">
       <h4 class="d-inline-flex mr-3 mb-0">
-        Bug List
+        Current Bugs
       </h4>
-      <button class="btn btn-dark" @click="createBug()">
+      <button class="btn btn-dark no-radius" @click="createBug()" v-if="state.currentUser.isAuthenticated">
         Report
       </button>
     </div>
-    <div class="row px-4 mt-3">
-      <div class="col-12">
+    <div class="row">
+      <div class="col-12 borders px-4 mt-3 py-2">
         <div class="row">
-          <!-- Table Headers -->
-          <div class="col-3 d-flex justify-content-center align-items-center theader">
-            <h5 class="mb-0 py-1">
-              Title
-            </h5>
-          </div>
-          <div class="col-3 d-flex justify-content-center align-items-center theader">
-            <h5 class="mb-0 py-1">
-              Reported By
-            </h5>
-          </div>
-          <div class="col-3 d-flex justify-content-center align-items-center theader">
-            <h5 class="mb-0 py-1">
-              Status
-            </h5>
-            <i class="fa fa-chevron-down" aria-hidden="true" @click="sortBugs()"></i>
-          </div>
-          <div class="col-3 d-flex justify-content-center align-items-center theader bd-r">
-            <h5 class="mb-0 py-1">
-              Last Modified
-            </h5>
+          <div class="col-12">
+            <div class="row">
+              <!-- Table Headers -->
+              <div class="col-3 d-flex justify-content-center align-items-center theader">
+                <h5 class="mb-0 py-1">
+                  Title
+                </h5>
+              </div>
+              <div class="col-3 d-flex justify-content-center align-items-center theader">
+                <h5 class="mb-0 py-1">
+                  Reported By
+                </h5>
+              </div>
+              <div class="col-3 d-flex justify-content-center align-items-center theader">
+                <h5 class="mb-0 py-1">
+                  Status
+                </h5>
+                <i class="fa fa-chevron-down" aria-hidden="true" @click="sortBugs()"></i>
+              </div>
+              <div class="col-3 d-flex justify-content-center align-items-center theader">
+                <h5 class="mb-0 py-1">
+                  Last Modified
+                </h5>
+              </div>
+            </div>
           </div>
         </div>
+        <Bug v-for="bug in state.bugs" :key="bug.id" :bug="bug" />
       </div>
     </div>
-    <Bug v-for="bug in state.bugs" :key="bug.id" :bug="bug" />
   </div>
 </template>
 
@@ -51,7 +55,8 @@ export default {
       bugService.getBugs()
     })
     const state = reactive({
-      bugs: computed(() => AppState.bugs)
+      bugs: computed(() => AppState.bugs),
+      currentUser: computed(() => AppState.user)
     })
     return {
       state,
@@ -68,19 +73,23 @@ export default {
 
 <style lang="scss">
 .col-3 {
-  border: 3px solid var(--dark);
+  border: 0px solid var(--dark);
   border-right: 0px;
   border-top: 0px;
 }
 
-.theader {
-  border-top: 3px solid var(--dark);
-  border-bottom: 3px solid var(--danger);
-  background-color: var(--primary);
+.borders {
+  border: 1px solid black;
 }
 
-.bd-r {
-  border-right: 3px solid var(--dark);
+.no-radius {
+  border-radius: 0;
+  width: 120px
+}
+
+.theader {
+  border-top: 0px solid var(--dark);
+  border-bottom: 2px solid var(--danger);
 }
 
 .h5 {

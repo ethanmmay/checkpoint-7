@@ -61,19 +61,24 @@
 </template>
 
 <script>
-import { reactive } from 'vue'
+import { computed, onMounted, reactive } from 'vue'
 import { AppState } from '../AppState'
+import { noteService } from '../services/NoteService'
 export default {
   props: {
     bug: { type: Object, default: undefined }
   },
   setup() {
-    const state = reactive({
-      notes: AppState.notes
+    onMounted(() => {
+      noteService.getNotes()
     })
-
+    const state = reactive({
+      notes: computed(() => AppState.notes)
+    })
     return {
-      state
+      state,
+      loadState() {
+      }
     }
   }
 

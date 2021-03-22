@@ -3,17 +3,13 @@
 </template>
 
 <script>
-import { computed, onMounted, reactive } from 'vue'
+import { computed, reactive } from 'vue'
 import { useRoute } from 'vue-router'
 import { AppState } from '../AppState'
-import { bugService } from '../services/BugService'
 export default {
   name: 'Bug',
   setup() {
     const route = useRoute()
-    onMounted(() => {
-      bugService.setBugDetails(route.params.id)
-    })
     const state = reactive({
       bugs: computed(() => AppState.bugs)
     })

@@ -1,5 +1,6 @@
 /* eslint-disable no-undef */
 import { AppState } from '../AppState'
+import { Bug } from '../models/Bug'
 import { logger } from '../utils/Logger'
 import { api } from './AxiosService'
 
@@ -7,7 +8,7 @@ class BugService {
   async getBugs() {
     try {
       const res = await api.get('api/bugs')
-      AppState.bugs = res.data
+      AppState.bugs = res.data.map(b => new Bug(b))
     } catch (err) {
       logger.error('Couldnt load Bugs', err)
     }

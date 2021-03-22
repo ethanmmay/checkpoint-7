@@ -56,6 +56,7 @@
         </div>
       </div>
     </div>
+    <Note v-for="note in state.notes" :key="note.title" :note="note" />
   </div>
 </template>
 

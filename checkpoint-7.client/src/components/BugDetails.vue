@@ -1,10 +1,12 @@
 <template>
-  <div class="col-12">
-    <div class="row">
-      <h6>Title: </h6>
-    </div>
+  <div class="col-12 mt-4">
     <div class="row d-inline-flex justify-content-between w-100">
-      <h3> {{ bug.title }} </h3>
+      <div class="d-inline-flex align-items-center">
+        <h6 class="mr-3">
+          Title:
+        </h6>
+        <h3> {{ bug.title }} </h3>
+      </div>
       <button class="btn btn-danger">
         Close
       </button>

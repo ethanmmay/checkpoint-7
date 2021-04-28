@@ -1,10 +1,12 @@
 <template>
-  <header>
-    <Navbar :bug="bug" />
-  </header>
-  <main class="container-fluid">
-    <router-view />
-  </main>
+  <span>
+    <header>
+      <Navbar :bug="bug" />
+    </header>
+    <main class="container-fluid">
+      <router-view />
+    </main>
+  </span>
 </template>
 
 <script>
@@ -31,6 +33,6 @@ textarea {
   min-height: 350px;
 }
 * {
-  font-family: 'Roboto', sans-serif;
+  font-family: "Roboto", sans-serif;
 }
 </style>

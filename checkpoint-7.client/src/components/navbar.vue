@@ -105,7 +105,7 @@ export default {
 
 <style scoped>
 .bg-buglog {
-  background-color: #8c9999;
+  background-color: #3b4242;
 }
 .btn-maroon {
   background-color: #472424;
